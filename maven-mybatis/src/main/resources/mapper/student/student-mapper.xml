@@ -109,6 +109,50 @@
   <result column="reg_date" property="regDate"/>
   
   </resultMap>
+  
+  <update id = "updateStudent">
+  
+  
+  update
+  		student
+  		set
+  		name = #{name},
+  		tel = #{tel}
+  		where
+  		no = #{no}
+  		
+  		</update>
+  		
+  		<delete id = "deleteStudent">
+  		
+  		delete 
+  			from 
+  		student 
+  			where 
+  			no = #{no}
+  		
+  		</delete>
+  		
+  		<select id = "selectStudentList" resultType="student">
+  		 select 
+  		 * 
+  		 from 
+  		 student 
+  		 order by 
+  		 no desc
+  		
+  		
+  		
+  		</select>
+  		
+  		 <!-- studentMap만들어둔거 재사용 -->
+    <select id="selectStudentMapList" resultMap="studentMap">
+        select *
+        from student        
+        order by no desc
+    </select>
+  		
+  		
    
    
    

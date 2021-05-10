@@ -19,6 +19,12 @@ table.tbl-student th{text-align:right;}
 table.tbl-student td{text-align:left;}
 table.tbl-student tr:last-of-type td:first-child{text-align:center;}
 </style>
+<c:if test="${not empty msg}">
+<script>
+alert("${msg}");
+<c:remove var="msg" scope="session"/>
+</script>
+</c:if>
 </head>
 <body>
 	<div id="student-container">
@@ -79,11 +85,21 @@ table.tbl-student tr:last-of-type td:first-child{text-align:center;}
 				</tr>
 			</table>
 		</form>
+		<form method="POST" name="studentDelFrm" action="${pageContext.request.contextPath}/student/deleteStudent.do">
+			<input type="hidden" name="no" value="${param.no}" />			
+		</form>
+		<script>
+		var deleteStudent = () => {
+			if(confirm("정말 삭제하시겠습니까?")){
+				$(document.studentDelFrm).submit();
+			}
+		};
+		</script>
 		</c:if>
 		
 		<hr />
 		
-		<h1>학생 정보 조회(Map)</h1>
+		<h2>학생 정보 조회(Map)</h2>
 		<form name="ajaxStudentSearchFrm">
 			<table class="tbl-student">
 				<tr>
@@ -109,23 +125,22 @@ table.tbl-student tr:last-of-type td:first-child{text-align:center;}
 			$.ajax({
 				url: "${pageContext.request.contextPath}/student/selectOneStudentMap.do",
 				data: {no}, // {no: 3}
-				success: data =>{
+				success: data => {
 					console.log(data);
 					
 					var $table = $("<table class='tbl-student'></table>");
 					if(data){
 						$table
 							.append("<tr><th>학생번호</th><td>" + data.no + "</td></tr>")
-							.append("<tr><th>이름</th><td>" + data.name+ "</td></tr>")
+							.append("<tr><th>이름</th><td>" + data.name + "</td></tr>")
 							.append("<tr><th>전화번호</th><td>" + data.tel + "</td></tr>")
 							.append("<tr><th>등록일</th><td>" + data.regDate + "</td></tr>")
 							.insertAfter($(e.target));
-						
 					}
-					else{
+					else {
 						alert("조회한 학생은 존재하지 않습니다.");
-						
 					}
+					
 				},
 				error: (xhr, statusText, err) => {
 					console.log(xhr, statusText, err);
