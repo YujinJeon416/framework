@@ -39,22 +39,26 @@ div#search-container{
 		<form name="empSearchFrm" >
 	
 			<h3>검색</h3>
-			<input type="button" value="초기화" />
+			<input type="reset" value="초기화" />
 	
 		<table id="tbl-search">
 			<tr>
 				<th colspan="2">
-					<select name="searchType" >
+					<select name="searchType" required>
 						<option value="">검색타입</option>
-						<option value="emp_id">사번</option>
-						<option value="emp_name">사원명</option>
-						<option value="email">이메일</option>
-						<option value="phone">전화번호</option>
+						<!-- required여부를 판단할 value="" 반드시 있어야함.-->
+				<option value="emp_id"   ${param.searchType eq 'emp_id' ? 'selected' : ''}>사번</option>
+				<option value="emp_name" ${param.searchType eq 'emp_name' ? 'selected' : ''}>사원명</option>
+				<option value="email"    ${param.searchType eq 'email' ? 'selected' : ''}>이메일</option>
+				<option value="phone"    ${param.searchType eq 'phone' ? 'selected' : ''}>전화번호</option>
 					</select>
 					&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="search" name="searchKeyword" value="" />
+					<input type="search" name="searchKeyword" value="${param != null? param.searchKeyword : ""}" required/>	
+			
+	
 				</th>
 			</tr>
+	
 			<!-- 성별 radio 추가 -->
 			<tr>
 				<th>성별</th>
@@ -65,9 +69,32 @@ div#search-container{
 					<label for="gender1">여</label>
 				</td>
 			</tr>
+			
+			<!-- 급여기준 -->
+	    <tr>
+		<th>급여</th>
+		<td>
+			<input type="number" name="salary" min="0" step="500000" value="${ param.salary }"/>
+			<input type="radio" name="salaryCompare" id="salaryCompareGE" value='ge' ${ param.salaryCompare eq 'ge' ? 'checked' : '' }/>
+			<label for="salaryCompareGE">이상</label>
+			<input type="radio" name="salaryCompare" id="salaryCompareLE" value='le' ${ param.salaryCompare eq 'le' ? 'checked' : '' }/>
+			<label for="salaryCompareLE">이하</label>
+		</td>
+	</tr>
+	<!-- @실습문제 : 입사일 조회 -->
+		<tr>
+			<th>입사일</th>
+			<td>
+				<input type="date" name="hire_date" value=""/>	
+				<input type="radio" name="hiredateCompare" id="hire_date_le" value='le' ${param.hiredateCompare eq 'le' ? 'checked' : '' }/>
+				<label for="hire_date_le">이전</label>
+				<input type="radio" name="hiredateCompare" id="hire_date_ge" value='ge'  ${param.hiredateCompare eq 'ge' ? 'checked' : '' }/>
+				<label for="hire_date_ge">이후</label>
+			</td>
+		</tr>
 			<tr>
 				<th colspan="2">
-					<input type="submit" id="btn-search" value="검색"  />
+					<input type="submit" id="btn-search" value="검색" />
 				</th>
 			</tr>
 		</table>

@@ -12,5 +12,11 @@ public interface EmpDao {
 	List<Map<String, Object>> search1(SqlSession session, Map<String, Object> param);
 
 	List<Map<String, Object>> search2(SqlSession session, Map<String, Object> param);
+	
+	List<Map<String, String>> selectJobList(SqlSession session);
+
+	List<Map<String, Object>> search3(SqlSession session, Map<String, Object> param);
+
+	List<Map<String, String>> selectdeptList(SqlSession session);
 
 }

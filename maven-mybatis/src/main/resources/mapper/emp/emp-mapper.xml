@@ -45,6 +45,155 @@
             and
                 ${searchType} like '%' || #{searchKeyword} || '%'
             </if>
+            <!-- 
+            	CDATA Section
+            	xml의 entity문자(예약문자) < > & 등을 문자 그대로 사용하고자 할때 사용.
+            	<![CDATA[문자그대로처리]]>
+            -->
+           <if test="salary != null and salary != 0">
+            <if test="salaryCompare != null and salaryCompare != ''">
+            <choose>
+                <when test="salaryCompare == 'ge'">
+                    and salary <![CDATA[ >= ]]> #{salary}
+                </when>
+                <when test="salaryCompare == 'le'">
+                    and salary <![CDATA[ <= ]]> #{salary}
+                </when>
+                <otherwise></otherwise>
+            </choose>
+            </if>
+        </if>
+        <!--  1. hire_date 문자열로 처리 -->
+       <!--  <if test = "hire_Date != null and hire_date != ''">
+        <if test="hiredateCompare != null and hiredateCompare != ''">
+        <choose>
+        <when test = "hiredateCompare eq 'ge'">
+        and hire_date<![CDATA[ >= ]]> to_Date(#{hire_date} , 'yyyy-mm-dd')
+        
+        
+        </when>
+        <when test = "hiredateCompare eq 'le'">
+        and hire_date <![CDATA[ <= ]]> to_Date(#{hire_date} , 'yyyy-mm-dd')
+        
+        </when>
+        
+        </choose>
+        
+        </if>
+        
+        </if> -->
+        <!-- hireDate 날짜형으로 처리 -->
+         <if test = "hireDate != null">
+        <if test="hiredateCompare != null and hiredateCompare != ''">
+        <choose>
+        <when test = "hiredateCompare eq 'ge'">
+        and hire_date<![CDATA[ >= ]]> #{hire_date} 
+        
+        
+        </when>
+        <when test = "hiredateCompare eq 'le'">
+        and hire_date <![CDATA[ <= ]]> #{hire_date}
+        
+        </when>
+        
+        </choose>
+        
+        </if>
+        
+        </if>
         </where>
     </select>
+ <!-- 
+  where
+  	${searchType} like '%' || #{searchKeyword} || '%'
+  	and gender = #{gender} 안됨
+  	
+  where
+  	${searchType} like '%' || #{searchKeyword} || '%' 안됨
+  	
+  where
+  	and gender = #{gender} 됨
+  	
+  where
+  order by emp_id 됨
+  -->
+    
+   <select id="selectJobList" resultType="map">
+  	select
+  		job_code "jobCode", 
+  		job_name "jobName"
+  	from
+  		job
+	order by
+		job_code
+  </select>
+  
+  <select id="selectdeptList" resultType="map">
+  select
+  		dept_id "deptCode", 
+  		dept_title "deptTitle"
+  	from
+  		dept
+	order by
+		dept_id
+  </select>
+   
+<!--    property는 java에서 쓰일 map의 키값 -->
+   <resultMap type="map" id="empMap">
+      <id column="emp_id" property="empId"/> <!-- pk -->   
+      <result column="emp_name" property="empName"/> <!-- 나머지 컬럼 -->
+      <result column="emp_no" property="empNo"/> 
+      <result column="email" property="email"/> 
+      <result column="phone" property="phone"/> 
+      <result column="dept_code" property="deptCode"/> 
+      <result column="job_code" property="jobCode"/> 
+      <result column="sal_level" property="salLevel"/> 
+      <result column="salary" property="salary"/> 
+      <result column="bonus" property="bonus"/> 
+      <result column="manager_id" property="managerId"/> 
+      <result column="hire_date" property="hireDate"/> 
+      <result column="quit_date" property="quitDate"/> 
+      <result column="quit_yn" property="quitYN"/> 
+      <result column="gender" property="gender"/> 
+      
+      <result column="job_name" property="jobName"/> 
+      <result column="dept_title" property="deptTitle"/> 
+      <result column="dept_id" property="deptId"/>
+      
+   </resultMap>
+   
+    <select id="search3" resultMap="empMap">
+      select
+         *
+      from (
+         select
+            e.*,
+            decode(substr(emp_no, 8, 1), '1', '남', '3', '남', '여') gender,
+            (select job_name from job where job_code = e.job_code) job_name,
+            (select dept_title from dept where dept_id = e.dept_code) dept_title
+            <!-- nvl((select dept_title from dept where dept_id = e.dept_code),'인턴') dept_title -->
+         from
+            emp e
+      )
+      <!-- where job_name in ('J1', 'J2') -->
+      <where>
+         <if test="jobCodeArr != null">
+         job_code in
+            <foreach collection="jobCodeArr" item="jobCode" open="(" close=")" separator=",">
+            #{jobCode}
+            </foreach>
+         </if>
+         <if test="deptCodeArr != null">
+          and nvl(dept_code, 'D0') in
+           <foreach collection="deptCodeArr" item="deptCode" open="(" close=")" separator=",">
+           #{deptCode}            
+           </foreach>
+         </if>   
+         <if test="false">
+  		<!-- nvl(dept_code,'D0') in ('D0', 'D1') -->
+  		</if>
+      </where>
+   </select>
+   
+
 </mapper>

@@ -1,6 +1,7 @@
 package com.kh.mybatis.emp.controller;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,17 +25,40 @@ public class EmpSearchController2 extends AbstractController {
 			String searchType = request.getParameter("searchType");
 			String searchKeyword = request.getParameter("searchKeyword");
 			String gender = request.getParameter("gender");
+			int salary = 0;
+			try {
+				salary = Integer.parseInt(request.getParameter("salary"));
+			} catch(NumberFormatException e) {
+				
+			}
+			String salaryCompare = request.getParameter("salaryCompare");
+			String hire_date = request.getParameter("hire_date"); //2021-05-05
+			String hiredateCompare = request.getParameter("hiredateCompare");
+			
+			//hire_date(문자열)이 아닌 Date타입으로 처리
+			Date hireDate = null; 
+			if(hire_date != null && ! "" .contentEquals(hire_date))
+				hireDate = Date.valueOf(hire_date);
+			
+			
+			
+			
 			
 			Map<String, Object> param = new HashMap<>();
 			param.put("searchType", searchType);
 			param.put("searchKeyword", searchKeyword);
 			param.put("gender", gender);
+			param.put("salary", salary);
+			param.put("salaryCompare", salaryCompare);
+//			param.put("hire_date", hire_date);
+			param.put("hireDate", hireDate);
+			param.put("hiredateCompare", hiredateCompare);
 			System.out.println("param@controller = " + param);
 			
 			//2. 업무로직
 			List<Map<String, Object>> list = empService.search2(param);
 			System.out.println("list@controller = " + list);
-			
+
 			//3. jsp위임
 			request.setAttribute("list", list);
 		}catch(Exception e){
