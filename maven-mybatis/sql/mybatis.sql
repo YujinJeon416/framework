@@ -52,4 +52,12 @@ grant select on kh.job to mybatis;
 grant create synonym to mybatis;
 --==========================================
 
+--직급코드가 J1, J2, J3인 사원조회
+select
+*
+from
+    emp
+    where
+    job_code in ('J1', 'J2','J3');
+
 

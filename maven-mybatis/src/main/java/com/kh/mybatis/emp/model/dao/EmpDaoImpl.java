@@ -11,16 +11,17 @@ public class EmpDaoImpl implements EmpDao {
 	public List<Map<String, Object>> selectAllEmp(SqlSession session) {
 		return session.selectList("emp.selectAllEmp");
 	}
+
 	@Override
-    public List<Map<String, Object>> search1(SqlSession session, Map<String, Object> param) {
-        return session.selectList("emp.search1", param);
-    }
-	
+	public List<Map<String, Object>> search1(SqlSession session, Map<String, Object> param) {
+		return session.selectList("emp.search1", param);
+	}
+
 	@Override
 	public List<Map<String, Object>> search2(SqlSession session, Map<String, Object> param) {
 		return session.selectList("emp.search2", param);
 	}
-	
+
 	@Override
 	public List<Map<String, String>> selectJobList(SqlSession session) {
 		return session.selectList("emp.selectJobList");
@@ -32,11 +33,21 @@ public class EmpDaoImpl implements EmpDao {
 	}
 
 	@Override
-	public List<Map<String, String>> selectdeptList(SqlSession session) {
-		return session.selectList("emp.selectdeptList");
+	public List<Map<String, String>> selectDeptList(SqlSession session) {
+		return session.selectList("emp.selectDeptList");
+	}
+
+	@Override
+	public Map<String, Object> selectOneEmp(SqlSession session, String empId) {
+		return session.selectOne("emp.selectOneEmp", empId);
+	}
+
+	@Override
+	public int updateEmp(SqlSession session, Map<String, String> param) {
+		return session.update("emp.updateEmp", param);
 	}
 	
 	
 	
-
+	
 }

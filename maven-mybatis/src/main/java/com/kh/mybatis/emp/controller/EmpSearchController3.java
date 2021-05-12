@@ -20,39 +20,43 @@ public class EmpSearchController3 extends AbstractController {
 
 	@Override
 	public String doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//1.사용자입력값
-				String[] jobCodeArr = request.getParameterValues("jobCode");
-				String[] deptCodeArr = request.getParameterValues("deptCode");
-				
-				Map<String, Object> param = new HashMap<>();
-				param.put("jobCodeArr", jobCodeArr);
-				param.put("deptCodeArr", deptCodeArr);
-				System.out.println("jobCodeArr@controller = " + Arrays.toString(jobCodeArr));
-				System.out.println("deptCodeArr@controller = " + Arrays.toString(deptCodeArr));
-						
-				//2.업무로직
-				//a.jsp에 job목록을 나열
-				List<Map<String, String>> jobList = empService.selectJobList();
-				System.out.println("jobList@controller = " + jobList);
-				
-				//b.jsp에 dept 목록을 나열
-				List<Map<String, String>> deptList = empService.selectdeptList();
-				System.out.println("deptList@controller = " + deptList);
-				
-				//c.직급/부서 검색
-				List<Map<String, Object>> list = empService.search3(param);
-				System.out.println("list@controller = " + list);
-				
-				
-				//3.jsp위임
-				request.setAttribute("jobList", jobList);
-				request.setAttribute("list", list);
-				request.setAttribute("deptList", deptList);
-				
-				return "emp/search3";
-	
-	}
-	
-	
-	}
+		try {
+			//1. 사용자입력값
+			String[] jobCodeArr = request.getParameterValues("jobCode");
+			String[] deptIdArr = request.getParameterValues("deptId");
+			List<String> deptIdList = null;
+			if(deptIdArr != null)
+				deptIdList = Arrays.asList(deptIdArr);
+			
+			Map<String, Object> param = new HashMap<>();
+			param.put("jobCodeArr", jobCodeArr);
+			param.put("deptIdList", deptIdList);
+			
+			System.out.println("param@controller = " + param);
+			
+			
+			//2. 업무로직
+			//jobList조회(job_code, job_name)
+			List<Map<String, String>> jobList = empService.selectJobList();
+			System.out.println("jobList@controller = " + jobList);
 
+			//deptList조회(dept_code, dept_title)
+			List<Map<String, String>> deptList = empService.selectDeptList();
+			System.out.println("deptList@controller = " + deptList);
+			
+			List<Map<String, Object>> list = empService.search3(param);
+			System.out.println("list@controller = " + list);
+
+			//3. jsp위임
+			request.setAttribute("list", list);
+			request.setAttribute("jobList", jobList);
+			request.setAttribute("deptList", deptList);
+		}catch(Exception e){
+			e.printStackTrace();
+			throw e;
+		}
+		return "emp/search3";
+	}
+	
+	
+}

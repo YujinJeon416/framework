@@ -23,21 +23,21 @@ public class EmpServiceImpl implements EmpService {
 	}
 
 	@Override
-    public List<Map<String, Object>> search1(Map<String, Object> param) {
-        SqlSession session = getSqlSession();
-        List<Map<String, Object>> list = empDao.search1(session, param);
-        session.close();
-        return list;
-    }
+	public List<Map<String, Object>> search1(Map<String, Object> param) {
+		SqlSession session = getSqlSession();
+		List<Map<String, Object>> list = empDao.search1(session, param);
+		session.close();
+		return list;
+	}
 
 	@Override
 	public List<Map<String, Object>> search2(Map<String, Object> param) {
-		  SqlSession session = getSqlSession();
-	        List<Map<String, Object>> list = empDao.search2(session, param);
-	        session.close();
-	        return list;
+		SqlSession session = getSqlSession();
+		List<Map<String, Object>> list = empDao.search2(session, param);
+		session.close();
+		return list;
 	}
-	
+
 	@Override
 	public List<Map<String, String>> selectJobList() {
 		SqlSession session = getSqlSession();
@@ -55,12 +55,43 @@ public class EmpServiceImpl implements EmpService {
 	}
 
 	@Override
-	public List<Map<String, String>> selectdeptList() {
+	public List<Map<String, String>> selectDeptList() {
 		SqlSession session = getSqlSession();
-		List<Map<String, String>> deptList = empDao.selectdeptList(session);
+		List<Map<String, String>> deptList = empDao.selectDeptList(session);
 		session.close();
 		return deptList;
 	}
+
+	@Override
+	public Map<String, Object> selectOneEmp(String empId) {
+		SqlSession session = getSqlSession();
+		Map<String, Object> emp = empDao.selectOneEmp(session, empId);
+		session.close();
+		return emp;
+	}
+
+	@Override
+	public int updateEmp(Map<String, String> param) {
+		SqlSession session = getSqlSession();
+		int result = 0;
+		try {
+			result = empDao.updateEmp(session, param);
+			session.commit();
+		} catch(Exception e) {
+			session.rollback();
+			throw e;
+		} finally {
+			session.close();
+		}
+		
+		return result;
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 
