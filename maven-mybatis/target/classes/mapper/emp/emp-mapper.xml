@@ -174,7 +174,7 @@
 			<if test="jobCode != null and jobCode != ''">
 			job_code = #{jobCode},
 			</if>
-			<if test="deptCode != null and deptCode != ''">
+			<if test="detpCode != null and deptCode != ''">
 			dept_code = #{deptCode}
 			</if>
 		</trim>

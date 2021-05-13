@@ -31,7 +31,7 @@ div#search-container{
 	<h2>사원정보 </h2>
 	
 	<div id="search-container">
-		<form name="empSearchFrm">
+		<form name="empSearchFrm" action="">
 			<select name="searchType" required>
 				<option value="">검색타입</option>
 				<!-- required여부를 판단할 value="" 반드시 있어야함.-->
@@ -44,6 +44,7 @@ div#search-container{
 			<input type="submit" value="검색" />
 		</form>
 	</div>
+	
 	
 	<table class="tbl-emp">
 		<tr>

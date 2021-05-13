@@ -28,20 +28,15 @@ public class EmpSearchController2 extends AbstractController {
 			int salary = 0;
 			try {
 				salary = Integer.parseInt(request.getParameter("salary"));
-			} catch(NumberFormatException e) {
-				
-			}
+			} catch(NumberFormatException e) {}
 			String salaryCompare = request.getParameter("salaryCompare");
-			String hire_date = request.getParameter("hire_date"); //2021-05-05
+			String hire_date = request.getParameter("hire_date");//2021-05-05
 			String hiredateCompare = request.getParameter("hiredateCompare");
 			
 			//hire_date(문자열)이 아닌 Date타입으로 처리
-			Date hireDate = null; 
-			if(hire_date != null && ! "" .contentEquals(hire_date))
+			Date hireDate = null;
+			if(hire_date != null && !"".equals(hire_date))
 				hireDate = Date.valueOf(hire_date);
-			
-			
-			
 			
 			
 			Map<String, Object> param = new HashMap<>();
@@ -53,7 +48,10 @@ public class EmpSearchController2 extends AbstractController {
 //			param.put("hire_date", hire_date);
 			param.put("hireDate", hireDate);
 			param.put("hiredateCompare", hiredateCompare);
+			
+			
 			System.out.println("param@controller = " + param);
+			
 			
 			//2. 업무로직
 			List<Map<String, Object>> list = empService.search2(param);
